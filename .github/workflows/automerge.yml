@@ -1,9 +1,10 @@
-jobs: 
-  automerge: 
+jobs:
+  automerge:
     runs-on: ubuntu-latest
-    steps: 
-      - 
-        env: 
+  steps:
+      - name: automerge
+        uses: "pascalgn/automerge-action@v0.14.2"
+        env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           LOG: TRACE
           MERGE_COMMIT_MESSAGE: pull-request-description
@@ -15,18 +16,24 @@ jobs:
           MERGE_RETRY_SLEEP: "10000"
           UPDATE_LABELS: ""
           UPDATE_METHOD: rebase
-        name: automerge
-        uses: pascalgn/automerge-action@v0.14.2
-name: automerge
-true: 
-  check_suite: 
-    types: 
+true:
+  check_suite:
+    types:
       - completed
-  pull_request: ~
-  pull_request_review: 
-    types: 
+  pull_request:
+      types:
+        - labeled
+        - unlabeled
+        - synchronize
+        - opened
+        - edited
+        - ready_for_review
+        - reopened
+        - unlocked
+  pull_request_review:
+    types:
       - submitted
-  schedule: 
-    - 
-      cron: "65 05 * * 1"
+  schedule:
+    -
+      cron: "10 06 * * 1"
   status: {}
