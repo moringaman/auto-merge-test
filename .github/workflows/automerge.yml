@@ -20,7 +20,7 @@ jobs:
       mergeFailPR: ${{ steps.mainActionStep.outputs.MC_PR_NO }}
     steps:
       - id: mainActionStep
-        uses: VaibhavChidrawar/merge-schedule-action@master
+	uses: VaibhavChidrawar/merge-schedule-action@v0.1-alpha
         with:
           # Merge method to use. Possible values are merge, squash or
           # rebase. Default is merge.
