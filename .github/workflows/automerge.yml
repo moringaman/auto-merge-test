@@ -4,7 +4,7 @@ on:
   # https://help.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events-schedule.
   pull_request:
   schedule:
-    - cron: '40 6 * * *'
+    - cron: '5 7 * * *'
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
