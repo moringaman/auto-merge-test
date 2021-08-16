@@ -2,9 +2,8 @@ name: automerge
 on:
   # Add a cron to determine what time you want to auto-merge your pull request(s). Crons are written in UTC:
   # https://help.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events-schedule.
-  pull_request:
   schedule:
-    - cron: '5 7 * * *'
+    - cron: '15 7 * * *'
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
