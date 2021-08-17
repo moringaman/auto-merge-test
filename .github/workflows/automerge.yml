@@ -1,22 +1,39 @@
-name: automerge 
+name: Scheduled PR Merge
 on:
-  # Add a cron to determine what time you want to auto-merge your pull request(s). Crons are written in UTC:
-  # https://help.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events-schedule.
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - labeled
+      - unlabeled
   schedule:
-    - cron: 18 7 * * *
+    # https://crontab.guru/every-hour
+    - cron: 5 * * * *
+
 jobs:
-  auto-merge:
+  scheduled_PR_Merge_job:
+    name: Scheduled PR Merge Job
     runs-on: ubuntu-latest
+    outputs:
+      mergedPRs: ${{ steps.mainActionStep.outputs.MPR_LIST }}
+      mergeFailPR: ${{ steps.mainActionStep.outputs.MC_PR_NO }}
     steps:
-      - name: Auto-Merge Pull Requests
-        uses: "pascalgn/automerge-action@v0.14.2" 
+      - id: mainActionStep
+        uses: VaibhavChidrawar/merge-schedule-action@master
+        with:
+          # Merge method to use. Possible values are merge, squash or
+          # rebase. Default is merge.
+          merge_method: merge
+          #  Time zone to use. Default is UTC.
+          time_zone: "Europe/London"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_LABELS: automerge
-          MERGE_METHOD: merge
-          MERGE_COMMIT_MESSAGE: 'this was a scheduled merge'
-          MERGE_FORKS: false
-          MERGE_RETRIES: 6
-          MERGE_RETRY_SLEEP: 10000
-          UPDATE_LABELS: auto-merge
-          UPDATE_METHOD: merge
+
+  display_PR_status_job:
+    name: Show status of PR
+    runs-on: ubuntu-latest
+    needs: scheduled_PR_Merge_job
+    steps:
+      - run: echo ${{needs.scheduled_PR_Merge_job.outputs.mergedPRs}} ${{needs.scheduled_PR_Merge_job.outputs.mergeFailPR}}
+
